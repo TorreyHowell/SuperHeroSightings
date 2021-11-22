@@ -1,0 +1,191 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+    <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+    />
+    <title>H.E.R.O</title>
+    <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+    />
+
+    <script
+      async
+      src="https://maps.googleapis.com/maps/api/js?key=AIzaSyBrNXXek5J6N7ReEDDOfFSeWpNz9b-gWJI&callback=initMap"
+    ></script>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/OverlappingMarkerSpiderfier/1.0.3/oms.min.js"></script>
+
+    <link rel="stylesheet" href="css/style.css" />
+    <link rel="stylesheet" th:href="@{/css/style.css}" />
+  </head>
+  <body>
+    <!-- Navbar -->
+    <nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+      <div class="container mt-3">
+        <h1>H.E.R.O</h1>
+
+        <button
+          class="navbar-toggler"
+          type="button"
+          data-bs-toggle="collapse"
+          data-bs-target="#navMenu"
+        >
+          <span class="navbar-toggler-icon"></span>
+        </button>
+
+        <div class="collapse navbar-collapse" id="navMenu">
+          <ul class="navbar-nav ms-auto">
+            <li class="nav-item">
+              <a href="/sightings" class="nav-link">Sightings</a>
+            </li>
+            <li class="nav-item">
+              <a href="/supers" class="nav-link">Supers</a>
+            </li>
+            <li class="nav-item">
+              <a href="/powers" class="nav-link">Powers</a>
+            </li>
+            <li class="nav-item">
+              <a href="/organizations" class="nav-link">Organizations</a>
+            </li>
+            <li class="nav-item">
+              <a href="/locations" class="nav-link">Locations</a>
+            </li>
+          </ul>
+        </div>
+      </div>
+    </nav>
+
+    <main>
+      <div class="container">
+        <div class="row content">
+
+          <div class="col-xl-6">
+            <h2 class="text-center mt-3">Recent Sightings</h2>
+            <div id="map_element"></div>
+          </div>
+          <div class="col-xl-6">
+
+            <ul class="list-group mt-5 pt-5">
+              <li
+                th:each="sighting : ${sightings}"
+                th:class="'list-group-item mb-2 ' + ${sighting.superHuman.faction.name}"
+              >
+                <div class="row">
+                  <div class="row align-items-center">
+                    <div class="col-3">
+                      <img
+                        class="super-img img-thumbnail"
+                        th:src="@{${'/supers/image/' + sighting.superHuman.photoPath}}"
+                      />
+                    </div>
+
+                    <div class="col-5">
+                      <p
+                        th:text="${sighting.superHuman.name}"
+                        class="super-name text-left"
+                      >
+                        Super Name
+                      </p>
+
+                      <p
+                          th:text="${sighting.location.name}"
+                          class="super-name text-left"
+                      >
+                        Super Name
+                      </p>
+
+
+
+                      <p
+                        th:text="${dateFormatter.format(sighting.date)}"
+                        class="text-left date"
+                      ></p>
+                    </div>
+
+                    <div class="col-4 text-end links">
+                      <a
+                        class="details-link"
+                        th:href="@{/sighting-details/(id=${sighting.id})}"
+                        >Details</a
+                      >
+                      <a th:href="@{/edit-sighting/(id=${sighting.id})}"
+                        >Edit</a
+                      >
+                      <a
+                        th:href="@{/sighting-confirmDelete/(id=${sighting.id})}"
+                        >Delete</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+      </div>
+    </main>
+
+    <script th:inline="javascript">
+      initMap()
+
+      function initMap() {
+
+        const sightings = [[${sightings}]]
+
+        const mapElement = document.getElementById('map_element');
+        const map = new google.maps.Map(mapElement,
+            {center: {lat: 41.505493, lng: -81.681290}, zoom: 12});
+        const iw = new google.maps.InfoWindow();
+
+        const oms = new OverlappingMarkerSpiderfier(map, {
+          markersWontMove: true,
+          markersWontHide: true,
+          basicFormatEvents: true,
+          keepSpiderfied: true,
+          ignoreMapClick: false
+        });
+
+        for (let i = 0; i < sightings.length; i++) {
+          let markerData = {lat: sightings[i].location.latitude, lng: sightings[i].location.longitude}
+
+          const contentString = '<h2>' + sightings[i].superHuman.name + '</h2>' +
+              '<h6>' + sightings[i].location.name + '</h6>' +
+              '<h6>' + sightings[i].date + '</h6>' +
+              '<h6>' + sightings[i].description + '</h6>'
+
+          const marker = new google.maps.Marker({
+            position: markerData,
+            title: sightings[i].superHuman.name,
+          })
+
+          google.maps.event.addListener(marker, 'spider_click', function (e) {
+            iw.setContent(contentString);
+            iw.open(map, marker);
+          });
+
+          oms.addMarker(marker);
+        }
+
+      }
+    </script>
+
+    <script
+      src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+      integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+      crossorigin="anonymous"
+    ></script>
+    <script
+      src="https://code.jquery.com/jquery-3.6.0.js"
+      integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+      crossorigin="anonymous"
+    ></script>
+    <script></script>
+  </body>
+</html>

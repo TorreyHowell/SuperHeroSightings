@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+  <title>H.E.R.O</title>
+  <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+  />
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+  <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
+      rel="stylesheet"
+  />
+
+  <link rel="stylesheet" href="../../static/css/style.css"/>
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+  <div class="container mt-3">
+    <h1><a href="/">H.E.R.O</a></h1>
+
+    <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navMenu"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a href="/sightings" class="nav-link">Sightings</a>
+        </li>
+        <li class="nav-item">
+          <a href="/supers" class="nav-link">Supers</a>
+        </li>
+        <li class="nav-item">
+          <a href="/powers" class="nav-link" style="color: white">Powers</a>
+        </li>
+        <li class="nav-item">
+          <a href="/organizations" class="nav-link">Organizations</a>
+        </li>
+        <li class="nav-item">
+          <a href="/locations" class="nav-link">Locations</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="row content">
+      <div class="col-lg-6">
+        <h2 class="text-center mt-3">Create Power</h2>
+
+        <!-- Add Power Form -->
+        <form action="/powers/addPower" method="POST">
+          <div class="row justify-content-center">
+            <div class="mb-3 col-lg-8">
+              <label for="power-name" class="form-label">Power Name</label>
+              <input
+                  type="text"
+                  id="power-name"
+                  name="name"
+                  th:field="${power.name}"
+                  class="form-control"
+              />
+              <div th:if="${#fields.hasErrors('power.name')}">
+                <p th:each="error : ${#fields.errors('power.name')}" class="mt-1 text-danger"
+                   th:text="'*' + ${error}">Error
+
+                </p>
+              </div>
+            </div>
+            <div class="mb-3 col-lg-8">
+              <label for="description" class="form-label"
+              >Description</label
+              >
+              <textarea
+                  id="description"
+                  name="description"
+                  cols="30"
+                  rows="5"
+                  class="form-control"
+                  th:field="${power.description}"
+              ></textarea>
+              <div th:if="${#fields.hasErrors('power.description')}">
+                <p th:each="error : ${#fields.errors('power.description')}"
+                   class="mt-1 text-danger"
+                   th:text="'*' + ${error}">Error
+
+                </p>
+              </div>
+            </div>
+            <div class="d-grid col-lg-8">
+              <button type="submit" class="btn btn-primary mb-3">
+                Create
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <div class="col-lg-6">
+        <div class="row">
+          <div class="col-lg-11">
+            <h2 class="text-center mt-3 mb-4">Super Powers</h2>
+
+            <ul class="list-group ">
+
+              <li class="list-group-item mb-2" th:each="power : ${powers}">
+                <div class="row">
+                  <div class="row align-items-end ellipsis">
+
+                    <span th:text="${power.name}" class="col-6 super-name"
+                    >Power Name</span
+                    >
+                    <div class="col-6 text-end links">
+                      <a
+                          class="details-link"
+                          th:href="@{/powers/details/(id=${power.id})}"
+                      >Details</a
+                      >
+                      <a th:href="@{/powers/edit/(id=${power.id})}">Edit</a>
+                      <a th:href="@{/powers/confirmDelete/(id=${power.id})}"
+                      >Delete</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+        </div>
+
+
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"
+></script>
+<script
+    src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"
+></script>
+<script></script>
+</body>
+</html>

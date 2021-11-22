@@ -1,0 +1,234 @@
+@import url('https://fonts.googleapis.com/css2?family=Tourney&display=swap');
+@import url('https://fonts.googleapis.com/css2?family=Teko&display=swap');
+
+body {
+  font-family: Arial, Helvetica, sans-serif;
+  color: #fff;
+  background: url('../img/showcase.jpg') repeat-y center center/cover;
+  min-height: 100vh;
+}
+
+.box {
+  display: flex;
+  flex-flow: column;
+  height: 100%;
+}
+
+.box .row.header {
+  flex: 0 1 auto;
+}
+
+.box .row.content {
+  flex: 1 1 auto;
+}
+
+textarea {
+  resize: none;
+}
+
+.error {
+  margin-bottom: 0px;
+}
+
+.recent-sightings {
+  background-color: #444;
+  border-radius: 10px;
+}
+
+#map_element {
+  width: 100%;
+  height: 600px;
+  border-radius: 10px;
+}
+
+a {
+  text-decoration: none;
+  color: #333;
+}
+
+a:hover {
+  color: #333;
+  cursor: pointer;
+}
+
+h1 {
+  font-family: Tourney;
+}
+
+h1 a,
+h1 a:hover {
+  color: white;
+  cursor: pointer;
+  text-decoration: none;
+}
+
+.recent-sightings h2 {
+  color: #f4f4f4;
+}
+
+.super-name {
+  font-size: 20px;
+  margin-bottom: 0;
+}
+
+.date {
+  margin-bottom: 0;
+}
+
+h2 {
+  font-size: 60px;
+  font-family: Teko;
+}
+
+li.Hero {
+  background-color: lightgreen;
+}
+
+li.Villain {
+  background-color: salmon;
+}
+
+.descriptionText {
+  margin-left: 100px;
+
+
+}
+
+.content {
+  background-color: #444;
+  min-height: 92vh;
+}
+
+@media screen and (min-width: 1000px) and (min-height: 700px){
+  nav {
+    height: 8vh;
+    overflow: hidden;
+
+  }
+}
+
+
+.description-container {
+  max-width: 500px;
+  margin: auto;
+}
+
+.modal-content {
+  background-color: #444;
+}
+
+
+.links a {
+  margin-left: 5px;
+}
+
+.gm-style-iw-d {
+  color: #333333;
+}
+
+.gm-style-iw-d h2 {
+  margin-bottom: 0px;
+}
+
+
+.check-list {
+  overflow: auto;
+  height: 150px;
+  padding-left: 5px;
+  padding-top: 5px;
+}
+
+.outer-check-list {
+  background-color: white;
+  border-radius: 5px;
+  color: black;
+  overflow: hidden;
+  padding: 0;
+}
+
+.super-img {
+  padding: 0;
+  height: 100px;
+  width: 100px;
+  border-radius: 50%;
+}
+
+@media screen and (max-width: 800px) {
+  .super-img {
+    padding: 0;
+    height: 50px;
+    width: 60px;
+  }
+}
+
+.super-card {
+  background-color: #333;
+  margin: auto;
+}
+
+.super-card p {
+  margin-bottom: 0px;
+}
+
+.super-card a {
+
+}
+
+.power-bubble {
+
+  background-color: lightblue;
+  color: black;
+  padding: 0px 8px;
+  border-radius: 15px;
+}
+.bubble-container {
+  display: flex;
+  flex-wrap: wrap;
+}
+.back-button {
+  margin: auto auto 10px;
+}
+
+#bubble {
+  margin: 5px 5px 10px 0;
+}
+
+.ellipsis {
+  overflow: hidden;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+
+
+
+html::-webkit-scrollbar {
+  width: 10px;
+}
+
+html::-webkit-scrollbar-track {
+  background-color: #212529;
+}
+
+html::-webkit-scrollbar-thumb {
+  background: #4e4e4e;
+  border-radius: 25px;
+}
+
+/* Chrome, Safari, Edge, Opera */
+input::-webkit-outer-spin-button,
+input::-webkit-inner-spin-button {
+  -webkit-appearance: none;
+  margin: 0;
+}
+
+/* Firefox */
+input[type=number] {
+  -moz-appearance: textfield;
+}
+
+
+
+
+
+
+

@@ -1,0 +1,231 @@
+<!DOCTYPE html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8"/>
+  <meta http-equiv="Content-Type" content="text/html; charset=UTF-8"/>
+  <meta
+      name="viewport"
+      content="width=device-width, initial-scale=1, shrink-to-fit=no"
+  />
+  <title>H.E.R.O</title>
+  <link
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css"
+      rel="stylesheet"
+      integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC"
+      crossorigin="anonymous"
+  />
+
+  <script src="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.js"></script>
+  <link
+      href="https://api.mapbox.com/mapbox-gl-js/v2.3.1/mapbox-gl.css"
+      rel="stylesheet"
+  />
+  <link rel="stylesheet" th:href="@{/css/style.css}"/>
+</head>
+<body>
+<!-- Navbar -->
+<nav class="navbar navbar-expand-lg bg-dark navbar-dark">
+  <div class="container mt-3">
+    <h1><a href="/">H.E.R.O</a></h1>
+
+    <button
+        class="navbar-toggler"
+        type="button"
+        data-bs-toggle="collapse"
+        data-bs-target="#navMenu"
+    >
+      <span class="navbar-toggler-icon"></span>
+    </button>
+
+    <div class="collapse navbar-collapse" id="navMenu">
+      <ul class="navbar-nav ms-auto">
+        <li class="nav-item">
+          <a href="/sightings" class="nav-link">Sightings</a>
+        </li>
+        <li class="nav-item">
+          <a href="/supers" class="nav-link" style="color: white">Supers</a>
+        </li>
+        <li class="nav-item">
+          <a href="/powers" class="nav-link">Powers</a>
+        </li>
+        <li class="nav-item">
+          <a href="/organizations" class="nav-link">Organizations</a>
+        </li>
+        <li class="nav-item">
+          <a href="/locations" class="nav-link">Locations</a>
+        </li>
+      </ul>
+    </div>
+  </div>
+</nav>
+
+<main>
+  <div class="container">
+    <div class="row content">
+      <div class="col-xl-6">
+        <h2 class="text-center mt-3">Register Super</h2>
+
+        <!-- Add Power Form -->
+        <form action="/supers/addSuper" method="POST" enctype="multipart/form-data">
+          <div class="row justify-content-center">
+
+            <div class="col-lg-8">
+              <label for="superHuman-name" class="form-label">Super Name</label>
+              <input
+                  type="text"
+                  id="superHuman-name"
+                  name="name"
+                  class="form-control"
+                  th:value="${superHuman} ? ${superHuman.name} : ''"
+              />
+              <div th:if="${superHuman}">
+                <div th:if="${#fields.hasErrors('superHuman.name')}">
+                  <p th:each="error : ${#fields.errors('superHuman.name')}"
+                     class="mt-1 text-danger error" th:text="'*' + ${error}">
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="mt-2 col-lg-8">
+              <label for="file" class="form-label">Profile Picture</label>
+              <input name="file" class="form-control" type="file" id="file">
+            </div>
+
+            <div class="mt-2 col-lg-8">
+              <label for="faction" class="form-label">Faction</label>
+              <select
+                  class="form-select"
+                  id="faction"
+                  name="factionId"
+                  aria-label="Default select example"
+              >
+                <option selected>Select Faction</option>
+                <option th:each="faction : ${factions}"
+                        th:value="${faction.id}"
+                        th:text="${faction.name}"
+                        th:selected="${superHuman?.faction?.id == faction.id}">
+                  Hero
+                </option>
+              </select>
+              <div th:if="${superHuman}">
+                <div th:if="${#fields.hasErrors('superHuman.faction')}">
+                  <p th:each="error : ${#fields.errors('superHuman.faction')}"
+                     class="mt-1 text-danger error" th:text="'*' + ${error}">
+                  </p>
+                </div>
+              </div>
+
+            </div>
+
+            <div class="mt-2  col-lg-8">
+              <label for="powers" class="form-label">Powers</label>
+              <div id="powers" class="outer-check-list">
+                <div class="check-list form-control">
+                  <div class="form-check" th:each="power : ${powers}">
+                    <input name="powers" th:id="'power' + ${power.id}" class="form-check-input"
+                           th:checked="${superHuman?.power?.contains(power)}" type="checkbox" th:value="${power.id}">
+                    <label class="form-check-label" th:for="'power' + ${power.id}" th:text="${power.name}"></label>
+                  </div>
+                </div>
+              </div>
+              <div th:if="${superHuman}">
+                <div th:if="${#fields.hasErrors('superHuman.power')}">
+                  <p th:each="error : ${#fields.errors('superHuman.power')}"
+                     class="mt-1 text-danger error" th:text="'*' + ${error}">
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            <div class="mt-2 col-lg-8">
+              <label for="description" class="form-label"
+              >Description</label
+              >
+              <textarea
+                  id="description"
+                  name="description"
+                  cols="30"
+                  rows="5"
+                  class="form-control"
+                  th:text="${superHuman} ? ${superHuman.description} : ''"
+              ></textarea>
+
+              <div th:if="${superHuman}">
+                <div th:if="${#fields.hasErrors('superHuman.description')}">
+                  <p th:each="error : ${#fields.errors('superHuman.description')}"
+                     class="mt-1 text-danger error" th:text="'*' + ${error}">
+                  </p>
+                </div>
+              </div>
+
+            </div>
+            <div class="mt-3 d-grid col-lg-8">
+              <button type="submit" class="btn btn-primary mb-3">
+                Create
+              </button>
+            </div>
+          </div>
+        </form>
+      </div>
+
+      <!-- superHuman List Area -->
+      <div class="col-xl-6">
+        <div class="row justify-content-start">
+          <div class="col-lg-11">
+            <h2 class="text-center mt-3 mb-4">Supers</h2>
+            <ul class="list-group">
+              <li th:class="'list-group-item mb-2 ' + ${superHuman.faction.name}"
+                  th:each="superHuman : ${supers}">
+                <div class="row">
+                  <div class="row align-items-center">
+
+                    <div class="col-3">
+                      <div>
+                        <img th:src="@{${'/supers/image/' + superHuman.photoPath}}" class="super-img img-thumbnail" alt="Super profile picture">
+                      </div>
+                    </div>
+
+                    <div class="col-4 super-name ellipsis">
+                      <span th:text="${superHuman.name}"
+                      >Name</span>
+                    </div>
+
+                    <div class="col-5 text-end links">
+                      <a
+                          class="details-link"
+                          th:href="@{/supers/details/(id=${superHuman.superId})}"
+                      >Details</a
+                      >
+                      <a th:href="@{/supers/edit/(id=${superHuman.superId})}">Edit</a>
+                      <a th:href="@{/supers/confirmDelete/(id=${superHuman.superId})}"
+                      >Delete</a
+                      >
+                    </div>
+                  </div>
+                </div>
+              </li>
+            </ul>
+          </div>
+
+        </div>
+
+      </div>
+    </div>
+  </div>
+</main>
+
+<script
+    src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+    integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+    crossorigin="anonymous"
+></script>
+<script
+    src="https://code.jquery.com/jquery-3.6.0.js"
+    integrity="sha256-H+K7U5CnXl1h5ywQfKtSj8PCmoN9aaq30gDh27Xc0jk="
+    crossorigin="anonymous"
+></script>
+<script></script>
+</body>
+</html>
